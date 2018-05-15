@@ -1,0 +1,23 @@
+.title{
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  position: absolute;
+  z-index: 1;
+
+}
+
+#title-text{
+	color:"red";
+	font-family: 'VT323', monospace;
+	font-size: 56px;
+}
+
+canvas{
+	z-index: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+}

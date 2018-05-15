@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>HackFood</title>
+    <script src="matter.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class = "title">
+        <h1 id="title-text">
+            ME231: HackFood
+        </h1>
+    </div>
+  </body>
+</html>
+
+<script>
+    var screenWidth = screen.width;
+    var screenHeight = screen.height;
+
+    var Engine = Matter.Engine,
+        Events = Matter.Events,
+        Render = Matter.Render,
+        Runner = Matter.Runner,
+        Body = Matter.Body,
+        Composite = Matter.Composite,
+        Composites = Matter.Composites,
+        Constraint = Matter.Constraint,
+        MouseConstraint = Matter.MouseConstraint,
+        Mouse = Matter.Mouse,
+        World = Matter.World,
+        Bodies = Matter.Bodies,
+        Vector = Matter.Vector;
+
+    // create engine
+    var engine = Engine.create(),
+        world = engine.world;
+
+    // create renderer
+    var render = Render.create({
+        element: document.body,
+        engine: engine,
+        options: {
+            width: 1800,
+            height: 1200,
+            wireframes: false,
+            background: '#E1E1E1'
+        }
+    });
+
+    Render.run(render);
+
+    // create runner
+    var runner = Runner.create();
+    Runner.run(runner, engine);
+
+    // add bodies
+    var group = Body.nextGroup(true),
+        length = 500,
+        width = 10;
+        
+    var pendulum = Composites.stack(screenWidth/2, screenHeight/2 - 500, 2, 1, -20, 0, function(x, y) {
+        return Bodies.rectangle(x, y, length, width, { 
+            collisionFilter: { group: group },
+            frictionAir: 0,
+            chamfer: 9,
+            render: {
+                fillStyle: 'transparent',
+                lineWidth: 1
+            }
+        });
+    });
+
+    world.gravity.scale = 0.002;
+    
+    Composites.chain(pendulum, 0.45, 0, -0.45, 0, { 
+        stiffness: 0.9, 
+        length: 0,
+        angularStiffness: 0.7,
+        render: {
+            strokeStyle: '#E1E1E1'
+        }
+    });
+    
+    Composite.add(pendulum, Constraint.create({ 
+        bodyB: pendulum.bodies[0],
+        pointB: { x: -length * 0.42, y: 0 },
+        pointA: { x: pendulum.bodies[0].position.x - length * 0.42, y: pendulum.bodies[0].position.y },
+        stiffness: 0.9,
+        length: 0,
+        render: {
+            strokeStyle: '#E1E1E1'
+        }
+    }));
+
+    var upperArm = pendulum.bodies[0];
+    var lowerArm = pendulum.bodies[1];
+    upperArm.render.strokeStyle = '#00000000';
+    lowerArm.render.strokeStyle = '#00000000';
+
+    Body.rotate(lowerArm, -Math.PI * 0.3, {
+        x: lowerArm.position.x - 100,
+        y: lowerArm.position.y
+    });
+
+    // window.setInterval(reSpin, 1000);
+    // // window.setInterval(reSpinSlow, 1000);
+
+    // function reSpin(){
+    //     // Body.applyForce(upperArm, { x: 0, y: 0 },{ x: .05, y: .05 });
+    //     Body.setAngularVelocity(lowerArm, 0.01);
+    //     Body.setAngularVelocity(upperArm, 0.1);
+    // }
+    // function reSpinSlow(){
+    //     Body.setAngularVelocity(upperArm, -0.2);
+    // }
+    // Body.setAngularVelocity(lowerArm, 0.1);
+
+/////////CODE FOR FADE OF ARMS/////
+    // var opacityValue = -100;    //negative because start negative!
+    // var incTrigger = true;
+    // window.setInterval(increaseOpacity, 50);
+    // function increaseOpacity(){
+    //     if(opacityValue < 99 && incTrigger){
+    //         opacityValue++;
+    //     }else if (opacityValue > 0){
+    //         incTrigger = false;
+    //         opacityValue--;
+    //     }
+    //     else if (opacityValue == 0){
+    //         incTrigger = true;
+    //     }
+    //     pendulum.bodies[0].render.strokeStyle = '#000000' + opacityValue.toString();
+    //     pendulum.bodies[1].render.strokeStyle = '#000000' + opacityValue.toString();
+    // }
+/////////CODE FOR FADE OF ARMS/////
+
+    var random = Math.floor((Math.random() * 10000) + 1000);
+    window.setTimeout(makeVisible, 1000);
+    console.log(random);
+    function makeVisible(){
+        pendulum.bodies[0].render.strokeStyle = '#00000055';
+        pendulum.bodies[1].render.strokeStyle = '#0000005';
+        console.log("Asdf");
+        window.setTimeout(makeInvisible, 750);
+        random = Math.floor((Math.random() * 6000) + 2000);
+        window.setTimeout(makeVisible, random);
+    }
+
+    function makeInvisible(){
+        Body.setAngularVelocity(lowerArm, 0.04);
+        Body.setAngularVelocity(upperArm, 0.01);
+        pendulum.bodies[0].render.strokeStyle = '#00000000';
+        pendulum.bodies[1].render.strokeStyle = '#00000000';
+    }
+    
+    World.add(world, pendulum);
+
+    var trail = [];
+
+    Events.on(render, 'afterRender', function() {
+        trail.unshift({
+            position: Vector.clone(lowerArm.position),
+            speed: lowerArm.speed
+        });
+
+        Render.startViewTransform(render);
+        render.context.globalAlpha = 0.7;
+
+        for (var i = 0; i < trail.length; i += 1) {
+            var point = trail[i].position,
+                speed = trail[i].speed;
+            
+            var hue = 250 + Math.round((1 - Math.min(1, speed / 10)) * 170);
+            render.context.fillStyle = 'hsl(' + hue + ', 100%, 55%)';
+            render.context.fillRect(point.x, point.y, 2, 2);
+        }
+
+        render.context.globalAlpha = 1;
+        Render.endViewTransform(render);
+
+        if (trail.length > 5000) {
+            trail.pop();
+        }
+    });
+
+    // add mouse control
+    var mouse = Mouse.create(render.canvas),
+        mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: {
+                    visible: false
+                }
+            }
+        });
+
+    World.add(world, mouseConstraint);
+
+    // keep the mouse in sync with rendering
+    render.mouse = mouse;
+
+</script>
