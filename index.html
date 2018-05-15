@@ -13,6 +13,11 @@
         <h1 id="title-text">
             ME231: HackFood
         </h1>
+        <div class="spacer"></div>
+        <h3>Experience Design Meets Creative Cooking</h3>
+        <button type="button" onclick="bored()">I am bored...</button>
+        <button type="button" onclick="window.location.href='/anandupender.com'">I am ready to apply...</button>
+
     </div>
   </body>
 </html>
@@ -44,8 +49,8 @@
         element: document.body,
         engine: engine,
         options: {
-            width: 1800,
-            height: 1200,
+            width: screenWidth,
+            height: screenHeight,
             wireframes: false,
             background: '#E1E1E1'
         }
@@ -110,8 +115,7 @@
     // // window.setInterval(reSpinSlow, 1000);
 
     // function reSpin(){
-    //     // Body.applyForce(upperArm, { x: 0, y: 0 },{ x: .05, y: .05 });
-    //     Body.setAngularVelocity(lowerArm, 0.01);
+    //     Body.setAngularVelocity(lowerArm, 0.1);
     //     Body.setAngularVelocity(upperArm, 0.1);
     // }
     // function reSpinSlow(){
@@ -138,6 +142,8 @@
     // }
 /////////CODE FOR FADE OF ARMS/////
 
+/**************************
+
     var random = Math.floor((Math.random() * 10000) + 1000);
     window.setTimeout(makeVisible, 1000);
     console.log(random);
@@ -156,6 +162,14 @@
         pendulum.bodies[0].render.strokeStyle = '#00000000';
         pendulum.bodies[1].render.strokeStyle = '#00000000';
     }
+/**************************/
+
+    function bored(){
+        Body.setAngularVelocity(lowerArm, 0.02);
+        Body.setAngularVelocity(upperArm, 0.02);
+        upperArm.render.strokeStyle = '#000000AA';
+        lowerArm.render.strokeStyle = '#000000AA';
+    }
     
     World.add(world, pendulum);
 
@@ -168,7 +182,7 @@
         });
 
         Render.startViewTransform(render);
-        render.context.globalAlpha = 0.7;
+        render.context.globalAlpha = 0.6;
 
         for (var i = 0; i < trail.length; i += 1) {
             var point = trail[i].position,
@@ -176,7 +190,7 @@
             
             var hue = 250 + Math.round((1 - Math.min(1, speed / 10)) * 170);
             render.context.fillStyle = 'hsl(' + hue + ', 100%, 55%)';
-            render.context.fillRect(point.x, point.y, 2, 2);
+            render.context.fillRect(point.x, point.y, 4, 4);
         }
 
         render.context.globalAlpha = 1;
