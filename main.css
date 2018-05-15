@@ -1,14 +1,3 @@
-.title{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  transform: translate(-50%, -50%);
-  position: absolute;
-  z-index: 1;
-
-}
-
 body{
 	font-family: 'VT323', monospace;
 	text-align:center;
@@ -21,6 +10,17 @@ body{
 
 h3{
 	font-size: 28px;
+}
+
+.title{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  position: absolute;
+  z-index: 1;
+
 }
 
 canvas{
