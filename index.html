@@ -10,13 +10,17 @@
   </head>
   <body>
     <div class = "title">
+
         <h1 id="title-text">
             ME231SI: HackFood
         </h1>
         <div class="spacer"></div>
         <h3>Experience Design Meets Creative Cooking</h3>
-        <button type="button" onclick="bored()">I am bored...</button>
-        <button type="button">I am ready to apply...</button>
+        <button type="button" onclick="bored()" class = "button">Bored?</button>
+        <a href="https://anandupender.com" class="button" type="submit"><span id="btn-text">Apply Now</span></a>
+        <a href="https://docs.google.com/document/d/1BVnF78_VZrM51Y-TXgiWZUHJNp46hFYnXeyjMHOrkoI/edit?usp=sharing" class="button" type="submit"><span id="btn-text">Syllabus</span></a>
+
+
 
     </div>
   </body>
@@ -166,7 +170,6 @@
 
     function bored(){
         Body.setAngularVelocity(lowerArm, 0.02);
-        Body.setAngularVelocity(upperArm, 0.02);
         upperArm.render.strokeStyle = '#000000AA';
         lowerArm.render.strokeStyle = '#000000AA';
     }
