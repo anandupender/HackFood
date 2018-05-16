@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./main.css">
 
   </head>
-  <body>
+  <body style="overflow:hidden;">
     <div class = "title">
 
         <h1 id="title-text">
@@ -115,18 +115,6 @@
         y: lowerArm.position.y
     });
 
-    // window.setInterval(reSpin, 1000);
-    // // window.setInterval(reSpinSlow, 1000);
-
-    // function reSpin(){
-    //     Body.setAngularVelocity(lowerArm, 0.1);
-    //     Body.setAngularVelocity(upperArm, 0.1);
-    // }
-    // function reSpinSlow(){
-    //     Body.setAngularVelocity(upperArm, -0.2);
-    // }
-    // Body.setAngularVelocity(lowerArm, 0.1);
-
 /////////CODE FOR FADE OF ARMS/////
     // var opacityValue = -100;    //negative because start negative!
     // var incTrigger = true;
@@ -154,7 +142,6 @@
     function makeVisible(){
         pendulum.bodies[0].render.strokeStyle = '#00000055';
         pendulum.bodies[1].render.strokeStyle = '#0000005';
-        console.log("Asdf");
         window.setTimeout(makeInvisible, 750);
         random = Math.floor((Math.random() * 6000) + 2000);
         window.setTimeout(makeVisible, random);
@@ -185,7 +172,7 @@
         });
 
         Render.startViewTransform(render);
-        render.context.globalAlpha = 0.6;
+        render.context.globalAlpha = 0.55;
 
         for (var i = 0; i < trail.length; i += 1) {
             var point = trail[i].position,
@@ -199,7 +186,7 @@
         render.context.globalAlpha = 1;
         Render.endViewTransform(render);
 
-        if (trail.length > 5000) {
+        if (trail.length > 3000) {
             trail.pop();
         }
     });
